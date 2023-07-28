@@ -1,11 +1,14 @@
-import { useRef } from "react";
-import * as THREE from "three";
+import { useState, useRef } from "react";
+// import * as THREE from "three";
 import { Physics, RigidBody } from "@react-three/rapier";
 
 import { useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 
 export default function Experience() {
+	const [stopVerticalAnimation, setStopVerticalAnimation] = useState(false);
+	const [stopHorizontalAnimation, setStopHorizontalAnimation] = useState(false);
+
 	const leftHorizontalRef = useRef();
 	const middleHorizontalRef = useRef();
 	const rightHorizontalRef = useRef();
@@ -16,40 +19,52 @@ export default function Experience() {
 		const time = state.clock.getElapsedTime();
 
 		// Vertical animAtion starting point and speed
-		const y = 20 - time * 5;
+		const y = 20 - time * 10;
 
-		leftHorizontalRef.current.setNextKinematicTranslation({
-			x: 0,
-			y: y,
-			z: 0,
-		});
+		if (!stopVerticalAnimation) {
+			leftHorizontalRef.current.setNextKinematicTranslation({
+				x: 0,
+				y: y,
+				z: 0,
+			});
 
-		middleHorizontalRef.current.setNextKinematicTranslation({
-			x: 0,
-			y: y,
-			z: 0,
-		});
+			middleHorizontalRef.current.setNextKinematicTranslation({
+				x: 0,
+				y: y,
+				z: 0,
+			});
 
-		rightHorizontalRef.current.setNextKinematicTranslation({
-			x: 0,
-			y: y,
-			z: 0,
-		});
+			rightHorizontalRef.current.setNextKinematicTranslation({
+				x: 0,
+				y: y,
+				z: 0,
+			});
+
+			if (y <= 0) {
+				setStopVerticalAnimation(true);
+			}
+		}
 
 		// Horizontal animAtion starting point and speed
-		const x = 20 - time * 5;
+		const x = 20 - time * 10;
 
-		leftVerticalRef.current.setNextKinematicTranslation({
-			x: x,
-			y: 0,
-			z: 0,
-		});
+		if (!stopHorizontalAnimation) {
+			leftVerticalRef.current.setNextKinematicTranslation({
+				x: x,
+				y: 0,
+				z: 0,
+			});
 
-		rightVerticalRef.current.setNextKinematicTranslation({
-			x: x,
-			y: 0,
-			z: 0,
-		});
+			rightVerticalRef.current.setNextKinematicTranslation({
+				x: x,
+				y: 0,
+				z: 0,
+			});
+
+			if (x <= 0) {
+				setStopHorizontalAnimation(true);
+			}
+		}
 	});
 
 	return (
